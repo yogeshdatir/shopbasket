@@ -1,16 +1,18 @@
 {
-    "python.pythonPath": "${workspaceFolder}/backend/env/Scripts/python",
-    "editor.formatOnSave": true,
-    "python.linting.pep8Enabled": true,
+  "editor.formatOnSave": true,
+    "python.linting.pycodestyleEnabled": true,
     "python.linting.pylintPath": "pylint",
     "python.linting.pylintArgs": ["--load-plugins", "pylint_django"],
     "python.linting.pylintEnabled": true,
     "python.venvPath": "${workspaceFolder}/backend/env/Scripts/python",
-    "python.linting.pep8Args": ["--ignore=E501"],
+    "python.linting.pycodestyleArgs": ["--ignore=E501"],
     "files.exclude": {
       "**/*.pyc": true
     },
     "cSpell.words": [
+      "bhdmqvep",
+      "fevqpuo",
+      "kipg",
       "truetype"
     ]
 }

@@ -5,18 +5,16 @@ import {
   ContentBox,
   ForgotPasswordLink,
   FormLabel,
-  GoogleSignIn,
   Input,
   Label,
   LoginBox,
   NormalSignInContainer,
-  RegisterLink,
   SeparatorText,
   SignInSubmit,
   SocialSignInContainer,
 } from "./SignInViewElements";
 import { CSSTransition } from "react-transition-group";
-import GoogleSingInButton from "../../../assets/img/google_signin_buttons/web/vector/btn_google_light_normal_ios.svg";
+import GoogleLogin from "react-google-login";
 
 interface Props {}
 
@@ -52,10 +50,20 @@ const SignInView = (props: Props) => {
           </NormalSignInContainer>
           <SeparatorText>or</SeparatorText>
           <SocialSignInContainer>
-            <GoogleSignIn to="/googlesignup">
-              <img src={GoogleSingInButton} alt="google sign in" />
-              <span></span>
-            </GoogleSignIn>
+            <div
+              style={{
+                margin: "1.5rem 0 1rem 0",
+              }}
+            >
+              <GoogleLogin
+                clientId="132753756630-bhdmqvep36dkc04fevqpuo4d5ni1kipg.apps.googleusercontent.com"
+                buttonText="Login"
+                onSuccess={(res) => console.log(res)}
+                onFailure={(res) => console.log(res)}
+                cookiePolicy={"single_host_origin"}
+                isSignedIn={true}
+              />
+            </div>
             <div>
               <span>New User?</span>
               <span
