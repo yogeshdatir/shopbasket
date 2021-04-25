@@ -8,8 +8,9 @@ import {
   USER_LOADED,
   USER_LOADING,
 } from "../actions/actionTypes";
+import { authStateType } from "../types/contextTypes";
 
-const authReducer = (state: any, action: any) => {
+const authReducer = (state: authStateType, action: any) => {
   switch (action.type) {
     case USER_LOADING:
       return {
@@ -21,14 +22,14 @@ const authReducer = (state: any, action: any) => {
         ...state,
         isAuthenticated: true,
         isLoading: false,
-        user: action.payload,
+        user: action.payload.data,
       };
     case LOGIN_SUCCESS:
     case REGISTER_SUCCESS:
-      // localStorage.setItem("token", action.payload.key);
+      localStorage.setItem("token", action.payload.access_token);
       return {
         ...state,
-        token: action.payload.key,
+        token: action.payload.access_token,
         isAuthenticated: true,
         isLoading: false,
       };
@@ -36,7 +37,7 @@ const authReducer = (state: any, action: any) => {
     case LOGIN_FAIL:
     case LOGOUT_SUCCESS:
     case REGISTER_FAIL:
-      // localStorage.removeItem("token");
+      localStorage.removeItem("token");
       return {
         ...state,
         token: null,

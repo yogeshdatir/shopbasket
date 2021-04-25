@@ -1,4 +1,4 @@
-export type autStateType = {
+export type authStateType = {
   token: string | null;
   isAuthenticated: boolean;
   isLoading: boolean;

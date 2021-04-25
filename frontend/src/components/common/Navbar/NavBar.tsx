@@ -1,4 +1,4 @@
-import React from "react";
+import { useContext, useEffect } from "react";
 import {
   Bars,
   Nav,
@@ -9,10 +9,29 @@ import {
   LogoContainer,
 } from "./NavBarElements";
 // import LogoImg from "../../../assets/img/logo/logo_transparent.png";
+import authContext from "../../../contexts/AuthContext";
+import axiosInstance from "../../../actions/axiosInstance";
+import { LOGOUT_SUCCESS } from "../../../actions/actionTypes";
 
 interface Props {}
 
 const NavBar = (props: Props) => {
+  const { state, dispatch } = useContext(authContext);
+
+  const fetchLogout = async () => {
+    await axiosInstance
+      .get("/dj-rest-auth/logout/")
+      .then((res) => {
+        dispatch({
+          type: LOGOUT_SUCCESS,
+        });
+      })
+      .catch((err) => {
+        // add error handling dispatch here
+        console.log(err);
+      });
+  };
+
   return (
     <>
       <Nav>
@@ -27,10 +46,16 @@ const NavBar = (props: Props) => {
           <NavLink to="/home">Home</NavLink>
           <NavLink to="/about">About</NavLink>
           <NavLink to="/contact">Contact</NavLink>
-          <NavLink to="/signup">Sign Up</NavLink>
         </NavMenu>
         <NavButton>
-          <NavButtonLink to="/signin">Sign In</NavButtonLink>
+          {state.token ? (
+            <button onClick={fetchLogout}>Logout</button>
+          ) : (
+            <>
+              <NavLink to="/signup">Sign Up</NavLink>
+              <NavButtonLink to="/signin">Sign In</NavButtonLink>
+            </>
+          )}
         </NavButton>
       </Nav>
     </>

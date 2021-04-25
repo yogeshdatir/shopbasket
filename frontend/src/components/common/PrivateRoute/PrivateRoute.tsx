@@ -2,28 +2,23 @@ import React, { useContext } from "react";
 import { Route, Redirect } from "react-router";
 import authContext from "../../../contexts/AuthContext";
 
-const PrivateRoute = ({
-  component: Component,
-  exact,
-  path,
-}: {
-  component: any;
-  exact: any;
-  path: any;
-}) => {
+const PrivateRoute = ({ component: Component, ...rest }: any) => {
   const { state } = useContext(authContext);
   return (
     <Route
-      exact
-      path={path}
-      render={(props) => {
+      {...rest}
+      render={(props: any) => {
         if (state.isLoading) {
           // you can add spinner here
           return <h2>Loading...</h2>;
-        } else if (!state.isAuthenticated) {
-          return <Redirect to="/signIn" />;
+        } else if (!state.token) {
+          return (
+            <Redirect
+              to={{ pathname: "/signIn", state: { from: props.location } }}
+            />
+          );
         } else {
-          return <Component {...props} />;
+          return <Component {...props}>{props.children}</Component>;
         }
       }}
     />

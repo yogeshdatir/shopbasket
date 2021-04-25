@@ -152,12 +152,17 @@ export const GoogleSignIn = styled(Link)`
   }
 `;
 
-export const RegisterLink = styled(Link)`
+export const RegisterLink = styled.span`
   margin: 0 0.5rem;
   font-size: 0.8em;
   font-weight: 550;
   color: #02a8e7;
-  text-decoration: none;
   padding-bottom: 2px;
   border-bottom: 2px solid #02a8e7;
+  cursor: pointer;
+  transition: all 300ms;
+
+  :hover {
+    font-size: 1rem;
+  }
 `;
