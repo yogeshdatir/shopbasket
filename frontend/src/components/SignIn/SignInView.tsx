@@ -18,7 +18,12 @@ import GoogleLogin from "react-google-login";
 import authContext from "../../contexts/AuthContext";
 import { toast } from "react-toastify";
 import axiosInstance from "../../actions/axiosInstance";
-import { LOGIN_FAIL, LOGIN_SUCCESS } from "../../actions/actionTypes";
+import {
+  LOGIN_FAIL,
+  LOGIN_SUCCESS,
+  REGISTER_FAIL,
+  REGISTER_SUCCESS,
+} from "../../actions/actionTypes";
 import { Redirect } from "react-router-dom";
 import history from '../common/history'
 
@@ -78,6 +83,38 @@ const SignInView = (props: Props) => {
           });
           dispatch({ type: LOGIN_FAIL });
         });
+    } else {
+      // Headers
+      const config = {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      };
+      const body = JSON.stringify({ username, email, password1: password, password2 });
+
+      axiosInstance
+        .post("/dj-rest-auth/registration/", body, config)
+        .then((res) => {
+          console.log(res)
+          dispatch({
+            type: REGISTER_SUCCESS,
+            payload: res.data,
+          });
+          history.push("/home");
+        })
+        .catch((err) => {
+          // add error handling dispatch here
+          toast.error(err.response.data["non_field_errors"][0], {
+            position: "bottom-center",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+          });
+          dispatch({ type: REGISTER_FAIL });
+        });
     }
   };
 
@@ -131,7 +168,9 @@ const SignInView = (props: Props) => {
             <ForgotPasswordLink to="/login">
               Forgot password?
             </ForgotPasswordLink>
-            <SignInSubmit onClick={handleOnSubmit}>Sign In</SignInSubmit>
+            <SignInSubmit onClick={handleOnSubmit}>
+              {isRegister ? "Sign Up" : "Sign In"}
+            </SignInSubmit>
           </NormalSignInContainer>
           <SeparatorText>or</SeparatorText>
           <SocialSignInContainer>
