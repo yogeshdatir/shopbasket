@@ -1,4 +1,4 @@
-import { useContext, useEffect } from "react";
+import React, { useContext, useEffect } from "react";
 import {
   Bars,
   Nav,
@@ -7,6 +7,7 @@ import {
   NavMenu,
   NavLink,
   LogoContainer,
+  NavButtonGroup,
 } from "./NavBarElements";
 // import LogoImg from "../../../assets/img/logo/logo_transparent.png";
 import authContext from "../../../contexts/AuthContext";
@@ -47,16 +48,16 @@ const NavBar = (props: Props) => {
           <NavLink to="/about">About</NavLink>
           <NavLink to="/contact">Contact</NavLink>
         </NavMenu>
-        <NavButton>
+        <NavButtonGroup>
           {state.token ? (
-            <button onClick={fetchLogout}>Logout</button>
+            <NavButton onClick={fetchLogout}>Logout</NavButton>
           ) : (
             <>
               <NavLink to="/signup">Sign Up</NavLink>
               <NavButtonLink to="/signin">Sign In</NavButtonLink>
             </>
           )}
-        </NavButton>
+        </NavButtonGroup>
       </Nav>
     </>
   );

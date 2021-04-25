@@ -63,7 +63,7 @@ export const NavMenu = styled.div`
   }
 `;
 
-export const NavButton = styled.nav`
+export const NavButtonGroup = styled.nav`
   display: flex;
   align-items: center;
   margin-right: 24px;
@@ -87,6 +87,24 @@ export const NavButtonLink = styled(Link)`
   &:hover {
     transition: all 0.2s ease-in-out;
     background: #fff;
-    color: #010606;
+    color: #256ce1;
+  }
+`;
+
+export const NavButton = styled.button`
+  border-radius: 4px;
+  background: #256ce1;
+  padding: 10px 22px;
+  color: #fff;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  text-decoration: none;
+
+  &:hover {
+    transition: all 0.2s ease-in-out;
+    background: #fff;
+    color: #256ce1;
   }
 `;

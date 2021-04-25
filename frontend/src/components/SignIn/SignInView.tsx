@@ -34,11 +34,10 @@ const SignInView = (props: Props) => {
     email: "",
     username: "",
     password: "",
-    password1: "",
     password2: "",
   });
 
-  const { email, username, password, password1, password2 } = formInput;
+  const { email, username, password, password2 } = formInput;
 
   const [isRegister, setIsRegister] = useState<boolean>(false);
 
@@ -50,39 +49,76 @@ const SignInView = (props: Props) => {
 
   const { state, dispatch } = useContext(authContext);
 
+  const loginWithoutGoogle = () => {
+    // Headers
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    };
+    const body = JSON.stringify({ email, password });
+
+    axiosInstance
+      .post("/dj-rest-auth/login/", body, config)
+      .then((res) => {
+        dispatch({
+          type: LOGIN_SUCCESS,
+          payload: res.data,
+        });
+        history.push("/home");
+      })
+      .catch((err) => {
+        // add error handling dispatch here
+        toast.error(err.response.data["non_field_errors"][0], {
+          position: "bottom-center",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+        dispatch({ type: LOGIN_FAIL });
+      });
+  };;
+
+  const loginWithGoogle = ({  accessToken, tokenId, profileObj  }: any) => {
+    // Headers
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    };
+    const body = JSON.stringify({ "access_token": accessToken, "id_token": tokenId });
+
+    axiosInstance
+      .post("/dj-rest-auth/google/", body, config)
+      .then((res) => {
+        dispatch({
+          type: LOGIN_SUCCESS,
+          payload: res.data,
+        });
+        history.push("/home");
+      })
+      .catch((err) => {
+        // add error handling dispatch here
+        toast.error(err.response.data["non_field_errors"][0], {
+          position: "bottom-center",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+        dispatch({ type: LOGIN_FAIL });
+      });
+  };;
+
   const handleOnSubmit = (event: any) => {
     event.preventDefault();
     if (!isRegister) {
-      // Headers
-      const config = {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      };
-      const body = JSON.stringify({ email, password });
-
-      axiosInstance
-        .post("/dj-rest-auth/login/", body, config)
-        .then((res) => {
-          dispatch({
-            type: LOGIN_SUCCESS,
-            payload: res.data,
-          });
-          history.push('/home');;
-        })
-        .catch((err) => {
-          // add error handling dispatch here
-          toast.error(err.response.data["non_field_errors"][0], {
-            position: "bottom-center",
-            autoClose: 5000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-          });
-          dispatch({ type: LOGIN_FAIL });
-        });
+      loginWithoutGoogle();
     } else {
       // Headers
       const config = {
@@ -90,12 +126,17 @@ const SignInView = (props: Props) => {
           "Content-Type": "application/json",
         },
       };
-      const body = JSON.stringify({ username, email, password1: password, password2 });
+      const body = JSON.stringify({
+        username,
+        email,
+        password1: password,
+        password2,
+      });
 
       axiosInstance
         .post("/dj-rest-auth/registration/", body, config)
         .then((res) => {
-          console.log(res)
+          console.log(res);
           dispatch({
             type: REGISTER_SUCCESS,
             payload: res.data,
@@ -182,10 +223,10 @@ const SignInView = (props: Props) => {
               <GoogleLogin
                 clientId="132753756630-bhdmqvep36dkc04fevqpuo4d5ni1kipg.apps.googleusercontent.com"
                 buttonText="Login with Google"
-                onSuccess={(res) => console.log(res)}
+                onSuccess={(res) => loginWithGoogle(res)}
                 onFailure={(res) => console.log(res)}
                 cookiePolicy={"single_host_origin"}
-                isSignedIn={true}
+                isSignedIn={false}
               />
             </div>
             <div>

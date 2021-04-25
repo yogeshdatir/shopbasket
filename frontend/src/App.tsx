@@ -17,6 +17,9 @@ function App() {
     isAuthenticated: false,
     isLoading: false,
     user: null,
+    provider: "",
+    providerAccessToken: "",
+    providerIdToken: "",
   };
   const [state, dispatch] = useReducer(authReducer, initialState);
 
@@ -43,7 +46,6 @@ function App() {
       if (token) {
         config.headers["Authorization"] = `Bearer ${token}`;
       }
-      console.log(config, token);
 
       await axiosInstance
         .get("/dj-rest-auth/user/", config)
